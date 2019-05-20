@@ -5,6 +5,11 @@
  */
 package tugas;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 /**
@@ -109,15 +114,61 @@ public class login extends javax.swing.JFrame {
 
     private void ButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonLoginActionPerformed
         // TODO add your handling code here:
-        String kataSandi = new String(PasswordField.getPassword());
-        
-       if((UsernameField.getText().equals("yaya"))&&(kataSandi.equals("12345"))){
-            JOptionPane.showMessageDialog(this, "Anda berhasil login", "Pesan", JOptionPane.INFORMATION_MESSAGE);
-            new tampilan().setVisible(true); //untuk ngeset biar form2 nya nanti keluar
-            this.dispose(); //nutup/keluar dari form ini karna maw ngebuka form lain
-       }else{
-           JOptionPane.showMessageDialog(this, "Maaf tidak berhasil login", "Pesan", JOptionPane.INFORMATION_MESSAGE);
-       }
+//        String kataSandi = new String(PasswordField.getPassword());
+//        
+//       if((UsernameField.getText().equals("yaya"))&&(kataSandi.equals("12345"))){
+//            JOptionPane.showMessageDialog(this, "Anda berhasil login", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+//            new tampilan().setVisible(true); //untuk ngeset biar form tampilan nya nanti keluar
+//            this.dispose(); //nutup/keluar dari form ini karna maw ngebuka form lain
+//       }else{
+//           JOptionPane.showMessageDialog(this, "Maaf tidak berhasil login", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+//       }
+String kataSandi = new String(PasswordField.getPassword());
+                  Statement stmt = null;
+                  ResultSet rs = null;
+                  Connection conn = null;
+                  
+                  try{
+                      conn = DriverManager.getConnection("jdbc:mysql://localhost/apotek_pbol?" +"user=root&passsword=");
+                      stmt = conn.createStatement();
+                      rs = stmt.executeQuery("SELECT COUNT(*) FROM user WHERE username='"+UsernameField.getText()+"' and password='"+kataSandi+"'");
+                      rs = stmt.getResultSet();
+                      //ngambil nilainya
+                      rs.next();
+                      int ada = rs.getInt(1);
+                      if(ada==0){
+                          JOptionPane.showMessageDialog(this, "Username atau password salah!","Error Login!", JOptionPane.ERROR_MESSAGE);
+                      }else{
+                          JOptionPane.showMessageDialog(this, "Berhasil Login!", "Login", JOptionPane.INFORMATION_MESSAGE);
+                          new tampilan().setVisible(true);
+                          this.dispose();
+                      }
+                      
+                      //gunakan variabel rs
+                  }
+                  catch (SQLException ex){
+                      //mengatasi error
+                      System.out.println("SQLException: " + ex.getMessage());
+                      System.out.println("SQLState: " + ex.getSQLState());
+                      System.out.println("VendorError: " + ex.getErrorCode());
+                  }
+                  finally{
+                      if(rs != null){
+                          try{
+                              rs.close();
+                          } catch (SQLException sqlEx) { } //ignore
+                          
+                          rs = null;
+                      }
+                      
+                      if(stmt != null){
+                          try{
+                              stmt.close();
+                          } catch (SQLException sqlEx) { } //ignore
+                          
+                          stmt = null;
+                      }
+                  }
     }//GEN-LAST:event_ButtonLoginActionPerformed
 
     /**
