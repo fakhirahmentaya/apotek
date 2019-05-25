@@ -5,18 +5,70 @@
  */
 package tugas;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author User
  */
 public class stokobat extends javax.swing.JFrame {
+    
+    private Connection con;
+    private Statement stat;
+    private ResultSet res;
 
     /**
      * Creates new form stokobat
      */
     public stokobat() {
         initComponents();
+        
+        koneksi();
+        tabel();
     }
+    
+    private void koneksi(){
+        try{
+            con=DriverManager.getConnection("jdbc:mysql://localhost/apotek_pbol?" + "user=root&password=");
+            stat=con.createStatement();
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    
+    private void tabel(){
+    DefaultTableModel tb= new DefaultTableModel();
+    //memberi nama pada setiap kolom tabel
+    tb.addColumn("Kode Obat");
+    tb.addColumn("Nama Obat");
+    tb.addColumn("Kategori Obat");
+    tb.addColumn("Stok");
+    tb.addColumn("Tanggal Kadaluarsa");
+    jTable1.setModel(tb);
+    
+    try{
+        //mengambil data dari database
+        res=stat.executeQuery("select * from stok_obat");
+        
+        while(res.next())
+        {
+            //mengambil data dari database berdasarkan nama kolom pada tabel
+            //lalu ditampilkan ke dalam jTable
+            tb.addRow(new Object[]{
+                res.getString("kode_obat"),
+                res.getString("nama_obat"),
+                res.getString("kategori"),
+                res.getInt("stok"),
+                res.getString("tgl_kadaluarsa")
+            });
+        }
+    }catch (Exception e){}
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -39,9 +91,9 @@ public class stokobat extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"B001", "Betadine", "Cair", "17", "02/06/2024"},
-                {"B002", "Panadol", "Kaplet", "22", "01/02/2021"},
-                {"B003", "Promag", "Tablet", "4", "01/03/2020"}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
                 "Kode Obat", "Nama Obat", "Kategori Obat", "Stok", "Tanggal Kadaluarsa"

@@ -5,18 +5,70 @@
  */
 package tugas;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author User
  */
 public class dataobat extends javax.swing.JFrame {
+    
+    private Connection con;
+    private Statement stat;
+    private ResultSet res;
 
     /**
      * Creates new form dataobat
      */
     public dataobat() {
         initComponents();
+        
+        koneksi();
+        tabel();
     }
+    
+    private void koneksi(){
+        try{
+            con=DriverManager.getConnection("jdbc:mysql://localhost/apotek_pbol?" + "user=root&password=");
+            stat=con.createStatement();
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    
+    private void tabel(){
+    DefaultTableModel tb= new DefaultTableModel();
+    //memberi nama pada setiap kolom tabel
+    tb.addColumn("Kode Obat");
+    tb.addColumn("Nama Obat");
+    tb.addColumn("Jenis Obat");
+    tb.addColumn("Kategori Obat");
+    tb.addColumn("Stok");
+    jTable1.setModel(tb);
+    
+    try{
+        //mengambil data dari database
+        res=stat.executeQuery("select * from data_obat");
+        
+        while(res.next())
+        {
+            //mengambil data dari database berdasarkan nama kolom pada tabel
+            //lalu ditampilkan ke dalam jTable
+            tb.addRow(new Object[]{
+                res.getString("kode_obat"),
+                res.getString("nama_obat"),
+                res.getString("jenis_obat"),
+                res.getString("kategori"),
+                res.getInt("stok")
+            });
+        }
+    }catch (Exception e){}
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -39,9 +91,9 @@ public class dataobat extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"B001", "Betadine", "Obat Luar", "Cair", "17"},
-                {"B002", "Panadol", "Obat Minum", "Kaplet", "2"},
-                {"B003", "Promag", "Obat Minum", "Tablet", "4"}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
                 "Kode Obat", "Nama Obat", "Jenis Obat", "Kategori Obat", "Stok"
