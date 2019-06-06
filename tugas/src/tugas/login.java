@@ -123,7 +123,7 @@ public class login extends javax.swing.JFrame {
 //       }else{
 //           JOptionPane.showMessageDialog(this, "Maaf tidak berhasil login", "Pesan", JOptionPane.INFORMATION_MESSAGE);
 //       }
-String kataSandi = new String(PasswordField.getPassword());
+            String kataSandi = new String(PasswordField.getPassword());
                   Statement stmt = null;
                   ResultSet rs = null;
                   Connection conn = null;
