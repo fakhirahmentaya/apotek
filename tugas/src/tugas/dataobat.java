@@ -5,10 +5,7 @@
  */
 package tugas;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -27,7 +24,6 @@ public class dataobat extends javax.swing.JFrame {
      */
     public dataobat() {
         initComponents();
-        
         koneksi();
         tabel();
     }
@@ -42,6 +38,7 @@ public class dataobat extends javax.swing.JFrame {
     }
     
     private void tabel(){
+    jTable1.setVisible(true);
     DefaultTableModel tb= new DefaultTableModel();
     //memberi nama pada setiap kolom tabel
     tb.addColumn("Kode Obat");
@@ -64,7 +61,7 @@ public class dataobat extends javax.swing.JFrame {
                 res.getString("kode_obat"),
                 res.getString("nama_obat"),
                 res.getString("jenis_obat"),
-                res.getString("kategori"),
+                res.getString("kategori_obat"),
                 res.getInt("stok"),
                 res.getInt("harga")
             });
@@ -118,6 +115,11 @@ public class dataobat extends javax.swing.JFrame {
                 "Kode Obat", "Nama Obat", "Jenis Obat", "Kategori Obat", "Stok", "Harga"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         jLabel2.setText("Kode Obat");
@@ -185,10 +187,25 @@ public class dataobat extends javax.swing.JFrame {
         });
 
         editButton.setText("Edit");
+        editButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editButtonActionPerformed(evt);
+            }
+        });
 
         clearButton.setText("Clear");
+        clearButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearButtonActionPerformed(evt);
+            }
+        });
 
         deleteButton.setText("Delete");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -200,10 +217,6 @@ public class dataobat extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(212, 212, 212)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 226, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(backButton)))
@@ -211,12 +224,12 @@ public class dataobat extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(121, 121, 121)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel4)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING))
                 .addGap(104, 104, 104)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -227,20 +240,24 @@ public class dataobat extends javax.swing.JFrame {
                             .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(insertButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(clearButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(clearButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(insertButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(24, 24, 24))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(208, 208, 208))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
                 .addGap(10, 10, 10)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -301,7 +318,7 @@ public class dataobat extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField6ActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-        // TODO add your handling code here:
+        // tombol back
         this.dispose();
         new tampilan().setVisible(true);
     }//GEN-LAST:event_backButtonActionPerformed
@@ -311,9 +328,93 @@ public class dataobat extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void insertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertButtonActionPerformed
-        // TODO add your handling code here:
+        // Tombol Insert
+        int kode_obat = Integer.parseInt(jTextField1.getText());
+        String nama_obat = jTextField5.getText();
+        String jenis_obat = jComboBox2.getSelectedItem().toString();
+        String kategori_obat = jComboBox1.getSelectedItem().toString();
+        int stok = Integer.parseInt(jTextField2.getText());
+        int harga = Integer.parseInt(jTextField6.getText());
+        
+        //proses insert data
+        try{
+            stat.executeUpdate("insert into data_obat values('"+ kode_obat +"','"+ nama_obat +"','"+ jenis_obat +"','"+ kategori_obat +"','"+ harga +"','"+ stok +"')");
+            JOptionPane.showMessageDialog(this,"Data berhasil Masuk!","Berhasil",JOptionPane.INFORMATION_MESSAGE);
+            //refresh data di tabel;
+            tabel();
+        }catch(SQLException e){
+            System.out.println("Error : " + e.getMessage());
+            System.out.println("SQL State : "+e.getSQLState());
+            System.out.println("Error Code : "+e.getErrorCode());
+        }
         
     }//GEN-LAST:event_insertButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        // Tombol Hapus
+        int pilihan = JOptionPane.showConfirmDialog(this,"Yakin ingin Hapus?","Konfirmasi",JOptionPane.YES_NO_OPTION);
+        if(pilihan == 0){
+            int kode_obat = Integer.parseInt(jTextField1.getText());
+            try{
+                 stat.executeUpdate("delete from data_obat where kode_obat = '"+ kode_obat +"'");
+                 JOptionPane.showMessageDialog(this,"Data Berhasil Dihapus!","Hapus Data",JOptionPane.INFORMATION_MESSAGE);
+                 //refresh data di tabel;
+                 tabel();
+            }catch(SQLException e){
+             System.out.println("Error : " + e.getMessage());
+             System.out.println("SQL State : "+e.getSQLState());
+             System.out.println("Error Code : "+e.getErrorCode());
+            }
+        }
+    }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+        // Tombol Clear
+        jTextField1.setText("");
+        jTextField5.setText("");
+        jTextField2.setText("");
+        jTextField6.setText("");
+    }//GEN-LAST:event_clearButtonActionPerformed
+
+    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
+        // Tombol edit
+        int kode_obat = Integer.parseInt(jTextField1.getText());
+        String nama_obat = jTextField5.getText();
+        String jenis_obat = jComboBox2.getSelectedItem().toString();
+        String kategori_obat = jComboBox1.getSelectedItem().toString();
+        int stok = Integer.parseInt(jTextField2.getText());
+        int harga = Integer.parseInt(jTextField6.getText());
+        
+        //proses insert data
+        try{
+            stat.executeUpdate("update data_obat set nama_obat = '"+ nama_obat +"',jenis_obat = '"+ jenis_obat +"',kategori_obat = '"+ kategori_obat +"',harga = '"+ harga +"',stok = '"+ stok +"' where kode_obat = '"+ kode_obat +"'");
+            JOptionPane.showMessageDialog(this,"Data berhasil Diupdate!","Berhasil",JOptionPane.INFORMATION_MESSAGE);
+            //refresh data di tabel;
+            tabel();
+        }catch(SQLException e){
+            System.out.println("Error : " + e.getMessage());
+            System.out.println("SQL State : "+e.getSQLState());
+            System.out.println("Error Code : "+e.getErrorCode());
+        }
+    }//GEN-LAST:event_editButtonActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // event click
+        int baris = jTable1.rowAtPoint(evt.getPoint());
+        String kode_obat = jTable1.getValueAt(baris,0).toString();
+        String nama_obat = jTable1.getValueAt(baris,1).toString();
+        String jenis_obat = jTable1.getValueAt(baris,2).toString();
+        String kategori_obat = jTable1.getValueAt(baris,3).toString();
+        String stok = jTable1.getValueAt(baris,4).toString();
+        String harga = jTable1.getValueAt(baris,5).toString();
+        
+        jTextField1.setText(kode_obat);
+        jTextField5.setText(nama_obat);
+        jTextField2.setText(stok);
+        jTextField6.setText(harga);
+        jComboBox2.setSelectedItem(jenis_obat);
+        jComboBox2.setSelectedItem(kategori_obat);
+    }//GEN-LAST:event_jTable1MouseClicked
 
     /**
      * @param args the command line arguments
