@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 16 Jun 2019 pada 12.09
+-- Waktu pembuatan: 16 Jun 2019 pada 09.50
 -- Versi server: 10.1.32-MariaDB
 -- Versi PHP: 7.2.5
 
@@ -42,8 +42,8 @@ CREATE TABLE `data_obat` (
 --
 
 INSERT INTO `data_obat` (`kode_obat`, `nama_obat`, `jenis_obat`, `kategori_obat`, `harga`, `stok`) VALUES
-(110001, 'Panadol Extra', 'Obat Minum', 'Cair', 12000, 11),
-(110002, 'Panadol Cold', 'Obat Minum', 'Tablet', 11500, 19),
+(110001, 'Panadol Extra', 'Obat Minum', 'Cair', 12000, 10),
+(110002, 'Panadol Cold', 'Obat Minum', 'Cair', 11000, 12),
 (110003, 'Sanmol', 'Obat Minum', 'Tablet', 4500, 9),
 (110004, 'Betadine', 'Obat Luar', 'Cair', 9500, 3);
 
@@ -80,7 +80,7 @@ CREATE TABLE `stok_obat` (
 
 INSERT INTO `stok_obat` (`kode_obat`, `tgl_kadaluarsa`) VALUES
 (110001, '2019-09-07'),
-(110002, '2019-09-16'),
+(110002, '2019-09-09'),
 (110003, '2020-05-08'),
 (110004, '2019-09-16');
 
